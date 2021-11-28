@@ -47,7 +47,7 @@ const Register = () => {
        
         // If user registered we going to get user details and generated token
         if (res.data.status === "success") {
-          console.log(res.data)
+          // console.log(res.data)
           userToken = res.data.token;
           userName = res.data.data.name;
           userId = res.data.data.id;

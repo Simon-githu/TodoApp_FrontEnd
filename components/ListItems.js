@@ -136,51 +136,49 @@ const ListItems = ({ name, token }) => {
     getUserTodos();
   }, []);
 
-  // running this function everytime the todos array changes
-  useEffect(() => {
-    getUserTodos();
-  }, [todos]);
-
   // Search function
   const Search = (text) => {
     if (text) {
-      // const newTodos = todos.filter((item) => {
-      //   const itemData = item.title
-      //     ? item.title.toUpperCase()
-      //     : "".toUpperCase();
-      //   const textData = text.toUpperCase();
-      //   return itemData.indexOf(textData) > -1;
-      // });
+      const newTodos = todos.filter((item) => {
+        const itemData = item.title
+          ? item.title.toUpperCase()
+          : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
    
-      // dispatch(setTodos(newTodos));
+      dispatch(setTodos(newTodos));
       setSearch(text);
-    } 
-    if(text == "")
-    {
-      const getTodosUrl = `${BASE_URL}/api/user/todos`;
-      axios
-        .get(getTodosUrl, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-        
-          if (res.data.status === "success") {
-         
-          }
-             // If request failed display error on console 
-             if (res.data.status === "failed") {
-              console.log(res.data)
-               }
-       // If request has an error display error on console 
-               if (res.data.status === "error") {
-                console.log(res.data)
-               }
-        }).catch((error)=>{
-          console.log(error.response.data)
-        })
-      // setSearch(text);
+    }else{
+      setSearch(text);
+      // get todos url
+    const getTodosUrl = `${BASE_URL}/api/user/todos`;
+    axios
+      .get(getTodosUrl, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        // console.log(res.data)
+        if (res.data.status === "success") {
+          let todos = [];
+
+          res.data.todos.map((item) => {
+            todos.push({
+              key: item.id,
+              title: item.title,
+              date: item.date,
+              completed: item.completed,
+            });
+          });
+          dispatch(setTodos(todos));
+        }
+      }).catch((error)=>{
+        console.log(error.response.headers)
+        console.log(error.response.data)
+        console.log(error.response.status)
+      })
     }
-  };
+  }
   // setting task as completed
   // Displaying an alert box to ask user if they would like to update the todo as todoCompleted
   // If yes it is going to the todo  and set completed to true

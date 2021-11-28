@@ -54,7 +54,7 @@ const Login = () => {
         
         // if user is available get user data and generated token
         if (res.data.status === "success") {
-          console.log(res.data)
+          // console.log(res.data)
           userToken = res.data.token;
           userName = res.data.data.name;
           userId = res.data.data.id;
@@ -94,7 +94,7 @@ const Login = () => {
          
         // If request failed set the error and display them
         if (res.data.status === "failed") {
-        console.log(res.data)
+        // console.log(res.data)
         setPasswordError(res.data.message)
         setIsSubmiting(false);
         }
